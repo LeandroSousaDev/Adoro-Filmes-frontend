@@ -1,7 +1,7 @@
 const url = 'https://tmdb-proxy.cubos-academy.workers.dev/3/discover/movie?language=pt-BR&include_adult=false'
 
-const botaoProximo = document.querySelector(".btn-next")
-const botaoAnterior = document.querySelector('.btn-prev')
+const nextBotton = document.querySelector(".btn-next")
+const prevBotton = document.querySelector('.btn-prev')
 
 const movies = document.querySelector(".movies")
 
@@ -31,30 +31,12 @@ async function init() {
 
 init()
 
-function creaObjeto(array) {
-
-    for (const item of array) {
-        
-        const filmes = {
-            poster: item.poster_path,
-            titulo: item.title,
-            nota: item.vote_average.toFixed(1)
-        }
-
-        console.log(filmes)
-    }
-
-}
-
-
 
 function listMovies(array) {
 
     movies.innerHTML = "";
 
     const currentArray = array.slice(start, start + 6)
-
-    creaObjeto(currentArray)
 
     for (let item of currentArray) {
 
@@ -84,3 +66,21 @@ function listMovies(array) {
     } 
 }
 
+
+nextBotton.addEventListener("click", () => {
+    if(arrayMovies.length <= 6) {
+        return
+    }
+
+    start += 6
+    listMovies(arrayMovies)
+})
+
+prevBotton.addEventListener("click", () => {
+    if (start == 0) {
+        return
+    }
+
+    start -= 6
+    listMovies(arrayMovies)
+})
