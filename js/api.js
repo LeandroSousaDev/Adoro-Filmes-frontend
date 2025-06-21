@@ -67,6 +67,10 @@ function listMovies(array) {
         img.src = './assets/estrela.svg'
         movieRating.appendChild(img)
 
+         movie.addEventListener('click', () => {
+            initModal(item.id)
+        })
+
     } 
 }
 
@@ -121,4 +125,55 @@ searchButton.addEventListener("click", () => {
     console.log(filme)
 
     input.value = ""
+})
+
+
+const modal = document.querySelector('.modal')
+const closeModal = document.querySelector('.modal__close')
+const titleModal = document.querySelector('.modal__title')
+const imgModal = document.querySelector('.modal__img ')
+const descriptionModal = document.querySelector('.modal__description')
+const averageModal = document.querySelector('.modal__average')
+const genereModal = document.querySelector('.modal__genres')
+
+let dataModal = ""
+
+async function APIModal(filme) {
+    try {
+        const Response = await axios.get(`https://tmdb-proxy.cubos-academy.workers.dev/3/movie/${filme}?language=pt-BR`)
+        console.log(Response.data)
+        const Modal = Response.data
+        return Modal
+    } catch (error) {
+        return error
+    }
+}
+
+async function initModal(id) {
+    dataModal = await APIModal(id)
+    createModal(dataModal)
+}
+
+function createModal(datas) {
+
+    modal.classList.remove("hidden")
+
+    titleModal.textContent = datas.title
+    imgModal.src = datas.backdrop_path
+    descriptionModal.textContent = datas.overview
+    averageModal.textContent = datas.vote_average.toFixed(1)
+
+    let html = ""
+
+    for (let item of datas.genres) {
+        html +=
+            `<span class="modal__genre">${item.name}</span>`
+
+        genereModal.innerHTML = html
+    }
+
+}
+
+closeModal.addEventListener("click", () => {
+    modal.classList.add("hidden")
 })
