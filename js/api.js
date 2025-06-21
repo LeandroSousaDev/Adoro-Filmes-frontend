@@ -120,9 +120,12 @@ async function initSearchMovie(busca) {
 searchButton.addEventListener("click", () => {
     const filme = input.value
 
-    initSearchMovie(filme)
+    if (filme == "") {
+        initListMovie()
+        return
+    }
 
-    console.log(filme)
+    initSearchMovie(filme)
 
     input.value = ""
 })
@@ -141,7 +144,6 @@ let dataModal = ""
 async function APIModal(filme) {
     try {
         const Response = await axios.get(`https://tmdb-proxy.cubos-academy.workers.dev/3/movie/${filme}?language=pt-BR`)
-        console.log(Response.data)
         const Modal = Response.data
         return Modal
     } catch (error) {
